@@ -1,36 +1,129 @@
-/* 設計系統起始範本
-   以這份檔案為起點調整，並在 design-system.md 說明每個變數的用途與使用規則。
-   報告狀態色刻意留給你自行定義。 */
-
+/* 影像報告設計系統 v2 · 奶油白／藕紫
+ * 依使用者提供的視覺參考重新整理。保留起始範本變數名稱。
+ * 網頁內嵌本檔以支援單檔離線使用；修改token後需同步HTML內嵌區。
+ * 報告狀態沿用既有雛型配色；A/B/C候選仍保留，未替使用者另選方案。
+ */
 :root {
-  /* 色彩：基本 */
-  --color-primary: #1f5fa8;
-  --color-bg: #ffffff;
-  --color-surface: #f5f7fa;
-  --color-text: #1f2933;
-  --color-text-muted: #5f6b7a;
-  --color-border: #d5dbe3;
-
-  /* 色彩：報告狀態（請改成你定義的顏色，並在 design-system.md 說明） */
-  --status-pending: #9aa5b1;    /* 未完成 */
-  --status-done: #9aa5b1;       /* 已完成 */
-  --status-certified: #9aa5b1;  /* 已認證 */
-  --status-dc: #9aa5b1;         /* 醫令已 DC */
-
-  /* 字級 */
-  --font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
+  --color-primary: #71546f;
+  --color-primary-hover: #60455e;
+  --color-primary-active: #51394f;
+  --color-on-primary: #ffffff;
+  --color-bg: #cbb8c5;
+  --color-surface: #f8f3e9;
+  --color-surface-raised: #fffcf6;
+  --color-surface-soft: #e9dfe5;
+  --color-header: #e4d9dd;
+  --color-text: #423440;
+  --color-text-muted: #685765;
+  --color-border: #d5c6cf;
+  --color-control-border: #8a7484;
+  --color-hover: #eee3eb;
+  --color-selected: #e1cfdd;
+  --color-focus: #684364;
+  --color-disabled-bg: #e9e1e5;
+  --color-disabled-text: #756773;
+  --color-readonly-bg: #f1e9ed;
+  --color-image-bg: #433b49;
+  --color-image-text: #eee5ed;
+  --color-image-border: #b5a5b6;
+  --color-feedback-success: #355d48;
+  --color-feedback-success-bg: #e5eee5;
+  --color-feedback-error: #8d3848;
+  --color-feedback-error-bg: #f7e6e9;
+  /* 狀態前景沿用原雛型；列底色減淡，保留文字標籤 */
+  --status-pending: #77570c;
+  --status-pending-bg: #fff0bc;
+  --status-pending-row: #fcf8ed;
+  --status-done: #355b80;
+  --status-done-bg: #e6eef6;
+  --status-done-row: #f3f5f8;
+  --status-certified: #246446;
+  --status-certified-bg: #d5eee0;
+  --status-certified-row: #f0f5ee;
+  --status-dc: #993b3b;
+  --status-dc-bg: #fbe4e4;
+  --status-dc-row: #fbefef;
+  --font-family: system-ui, -apple-system, "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
   --font-size-sm: 13px;
   --font-size-md: 15px;
-  --font-size-lg: 18px;
-  --font-size-xl: 22px;
-
-  /* 間距 */
+  --font-size-lg: 20px;
+  --font-size-xl: 28px;
+  --font-size-control: 14px;
+  --font-size-count: 32px;
+  --font-weight-regular: 400;
+  --font-weight-medium: 600;
+  --font-weight-bold: 700;
+  --line-height-body: 1.65;
+  --line-height-control: 1.5;
+  --line-height-heading: 1.3;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
+  --space-5: 20px;
   --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --radius: 12px;
+  --radius-panel: 20px;
+  --radius-badge: 8px;
+  --radius-shell: 28px;
+  --border-width: 1px;
+  --focus-width: 3px;
+  --focus-offset: 3px;
+  --control-height: 42px;
+  --control-height-compact: 34px;
+  --textarea-min-height: 120px;
+  --layout-max-width: 1600px;
+  --layout-sidebar: 220px;
+  --shadow-panel: 0 8px 24px rgb(71 44 66 / 5%);
+  --shadow-dialog: 0 24px 80px rgb(53 34 49 / 24%);
+}
+/* 方案 A：延續現有：琥珀／藍／綠；均待使用者決定 */
+[data-status-theme="A"] {
+  --status-pending: #77570c; /* 狀態文字／符號，不作深底上的白字背景 */
+  --status-pending-bg: #fff0bc;
+  --status-pending-row: #fff0bc;
+  --status-done: #355b80; /* 狀態文字／符號，不作深底上的白字背景 */
+  --status-done-bg: #e6eef6;
+  --status-done-row: #e6eef6;
+  --status-certified: #246446; /* 狀態文字／符號，不作深底上的白字背景 */
+  --status-certified-bg: #d5eee0;
+  --status-certified-row: #d5eee0;
+  --status-dc: #993b3b; /* 狀態文字／符號，不作深底上的白字背景 */
+  --status-dc-bg: #fbe4e4;
+  --status-dc-row: #fbe4e4;
+}
 
-  /* 圓角 */
-  --radius: 6px;
+/* 方案 B：藍／紫／青綠，DC 用橘褐；均待使用者決定 */
+[data-status-theme="B"] {
+  --status-pending: #1e40af; /* 狀態文字／符號，不作深底上的白字背景 */
+  --status-pending-bg: #eff6ff;
+  --status-pending-row: #eff6ff;
+  --status-done: #6b21a8; /* 狀態文字／符號，不作深底上的白字背景 */
+  --status-done-bg: #faf5ff;
+  --status-done-row: #faf5ff;
+  --status-certified: #115e59; /* 狀態文字／符號，不作深底上的白字背景 */
+  --status-certified-bg: #f0fdfa;
+  --status-certified-row: #f0fdfa;
+  --status-dc: #9a3412; /* 狀態文字／符號，不作深底上的白字背景 */
+  --status-dc-bg: #fff7ed;
+  --status-dc-row: #fff7ed;
+}
+
+/* 方案 C：中性色＋符號／邊框型態；均待使用者決定 */
+[data-status-theme="C"] {
+  --status-pending: #374151; /* 狀態文字／符號，不作深底上的白字背景 */
+  --status-pending-bg: #f9fafb;
+  --status-pending-row: #f9fafb;
+  --status-done: #374151; /* 狀態文字／符號，不作深底上的白字背景 */
+  --status-done-bg: #f3f4f6;
+  --status-done-row: #f3f4f6;
+  --status-certified: #111827; /* 狀態文字／符號，不作深底上的白字背景 */
+  --status-certified-bg: #e5e7eb;
+  --status-certified-row: #e5e7eb;
+  --status-dc: #4b5563; /* 狀態文字／符號，不作深底上的白字背景 */
+  --status-dc-bg: #ffffff;
+  --status-dc-row: #ffffff;
 }
