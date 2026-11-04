@@ -155,7 +155,7 @@ main{max-width:var(--layout-max-width);min-height:calc(100vh - 48px);margin:var(
 .primary:disabled,.primary:disabled:hover{background:var(--color-disabled-bg);color:var(--color-disabled-text);border-color:var(--color-border)}
 
 </style>
-<header><strong>▦ 影像報告工作站 <small id="role-caption">／醫師介面</small></strong><nav class="role-nav" aria-label="模擬角色切換"><button id="role-doctor" aria-pressed="true">醫師工作站</button><button id="role-rad" aria-pressed="false">放射師工作站</button><label for="identity">模擬醫師身分</label><select id="identity"><option>醫師甲</option><option>醫師丙</option></select></nav></header>
+<header><strong>▦ 影像報告工作站 <small id="role-caption">／醫師介面</small></strong><nav class="role-nav" aria-label="模擬角色切換"><button id="role-doctor" aria-pressed="true">醫師工作站</button><button id="role-rad" aria-pressed="false">放射師工作站</button><label id="identity-label" for="identity">模擬醫師身分</label><select id="identity"><option>醫師甲</option><option>醫師丙</option></select></nav></header>
 <main><div id="notice" class="notice hidden" role="status" aria-live="polite"></div><section id="radiographer" class="hidden"></section><dialog id="rad-dialog" class="rad-dialog"></dialog><section id="list"></section><section id="report" class="hidden"></section></main>
 <script>
 const types=['健檢胸部X光','健檢乳攝','門診放射','心臟超音波','頸動脈超音波'];
@@ -276,7 +276,7 @@ function openFormat(id){const r=rows.find(r=>r.id===id);$('rad-dialog').innerHTM
 function switchRole(nextRole,nextIdentity=identity){
 if(current&&eligible(current)){readDraft();if(JSON.stringify(draft)!==JSON.stringify(saved[current.id]||{})&&Object.values(draft).some(Boolean)&&!confirm('尚有未儲存內容，確定切換角色？')){$('identity').value=identity;return}}
 role=nextRole;identity=nextIdentity;current=null;queue=[];selected.clear();$('notice').classList.add('hidden');
-$('role-caption').textContent=role==='rad'?'／放射師介面':'／醫師介面';$('role-doctor').setAttribute('aria-pressed',String(role==='doctor'));$('role-rad').setAttribute('aria-pressed',String(role==='rad'));$('identity').disabled=role==='rad';
+$('role-caption').textContent=role==='rad'?'／放射師介面':'／醫師介面';$('role-doctor').setAttribute('aria-pressed',String(role==='doctor'));$('role-rad').setAttribute('aria-pressed',String(role==='rad'));$('identity').disabled=role==='rad';$('identity-label').classList.toggle('hidden',role==='rad');$('identity').classList.toggle('hidden',role==='rad');
 if(role==='doctor'){state={type:'',doctor:identity,status:'',q:'',date:'',sort:'date',asc:true};$('identity').value=identity}renderList();
 }
 $('role-doctor').onclick=()=>switchRole('doctor');$('role-rad').onclick=()=>switchRole('rad');$('identity').onchange=e=>switchRole('doctor',e.target.value);
