@@ -209,7 +209,7 @@ function nextReportCandidate(){
  const index=queue.indexOf(current.id);
  const ordered=index<0?queue:[...queue.slice(index+1),...queue.slice(0,index)];
  return ordered.map(id=>rows.find(r=>r.id===id)).find(r=>r&&r.id!==current.id&&(
- r.type===1?eligible(r):canReport(r)&&['未完成','已完成'].includes(r.status)))||null;
+ r.type===1?eligible(r):canReport(r)&&r.status==='未完成'))||null;
 }
 function renderPostCertification(){
  if(!current||role!=='doctor')return;
