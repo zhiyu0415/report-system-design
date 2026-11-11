@@ -203,7 +203,23 @@ if(!canReport(r)||!canEditCompleted)return;r.status='未完成';queue=visible().
 if($('edit-completed-inline'))$('edit-completed-inline').onclick=$('edit-completed').onclick;
 if($('certify-inline'))$('certify-inline').onclick=$('certify').onclick;
 if($('revoke-inline'))$('revoke-inline').onclick=$('revoke').onclick;
-window.scrollTo(0,0)}
+renderPostCertification();window.scrollTo(0,0)}
+function nextReportCandidate(){
+ if(!current||role!=='doctor')return null;
+ const index=queue.indexOf(current.id);
+ const ordered=index<0?queue:[...queue.slice(index+1),...queue.slice(0,index)];
+ return ordered.map(id=>rows.find(r=>r.id===id)).find(r=>r&&r.id!==current.id&&(
+ r.type===1?eligible(r):canReport(r)&&['未完成','已完成'].includes(r.status)))||null;
+}
+function renderPostCertification(){
+ if(!current||role!=='doctor')return;
+ const r=current,completed=r.type===1?r.mammo.readers.some(x=>x.doctor===identity&&x.signed):canReport(r)&&r.status==='已認證';
+ if(!completed)return;
+ const next=nextReportCandidate(),editor=$('report').querySelector('.editor');
+ if(!editor)return;
+ editor.insertAdjacentHTML('beforeend',`<div class="actions" aria-label="認證後下一步"><span class="muted">${next?'本份已認證，下一筆：'+next.id:'本次清單沒有其他可處理報告。'}</span><button class="primary" id="post-cert-next">${next?'下一筆待處理報告 →':'返回工作清單'}</button></div>`);
+ $('post-cert-next').onclick=()=>{const target=nextReportCandidate();if(target){openReport(target.id)}else{renderList();announce('本次清單沒有其他可處理報告。')}};
+}
 function applyImageVisibility(){
 const image=$('report-image'),workspace=$('report-workspace'),button=$('toggle-image');
 if(!image||!workspace||!button)return;
@@ -278,7 +294,7 @@ $('auto-retrieve').onclick=()=>{if(!requireRole('rad'))return;const pending=rows
 
  }
  if(!rad){
- const enter=id=>{queue=items.filter(eligible).map(r=>r.id);openReport(id)};
+ const enter=id=>{queue=items.map(r=>r.id);openReport(id)};
  document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>enter(b.dataset.open));
  const first=items.find(eligible);$('start').disabled=!first;$('start').onclick=()=>{if(first)enter(first.id)};
  }
@@ -335,7 +351,7 @@ $('mammo-back').onclick=()=>{if(mammoCanLeave()){current=null;mammoView=null;ren
 if($('mammo-save'))$('mammo-save').onclick=()=>persistMammo(false);
 if($('mammo-submit'))$('mammo-submit').onclick=()=>persistMammo(true);
 if($('mammo-revoke'))$('mammo-revoke').onclick=()=>mammoConfirm('取消本份認證後，本份及後續認證會失效；所有已填內文保留為草稿，後續需依序重新認證。確定修改？',()=>{for(let i=own;i<3;i++)m.readers[i].signed=false;if(own<2){m.needsThird=false;m.comparison='';m.readers[2].doctor=''}m.final=null;r.status='未完成';delete saved[r.id];openMammo(id);announce(id+' 已取消本份及後續認證，內文保留為草稿。')});
-mammoBaseline=JSON.stringify(mammoFormData());window.scrollTo(0,0);
+mammoBaseline=JSON.stringify(mammoFormData());renderPostCertification();window.scrollTo(0,0);
 }
 function persistMammo(sign,confirmed=false){const r=current;if(!r||r.type!==1)return;const m=r.mammo,index=mammoAction(r,identity),value=mammoFormData();if(index===null||!value)return;
 if(sign&&(mammoFields.some(f=>!value.data[f].trim())||(index===1&&!['same','different'].includes(value.comparison)))){announce('請完成報告欄位；第二位還需判斷兩份結果是否一致。');return}
